@@ -1,7 +1,5 @@
 package org.example.lv3;
 
-import org.example.lv2.MenuItem;
-
 import java.util.List;
 import java.util.Scanner;
 

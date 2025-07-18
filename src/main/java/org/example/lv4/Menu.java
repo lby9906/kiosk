@@ -1,7 +1,5 @@
 package org.example.lv4;
 
-import org.example.lv2.MenuItem;
-
 import java.util.List;
 
 public class Menu {
