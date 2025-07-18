@@ -21,7 +21,7 @@ public class Main2 {
             System.out.println(count + ". " + menu.getName() + "    | W " + menu.getPrice() + " | " + menu.getDescription());
             count++;
         }
-
+        System.out.println("0. 종료           | 종료");
         System.out.println();
 
         while (true) {
