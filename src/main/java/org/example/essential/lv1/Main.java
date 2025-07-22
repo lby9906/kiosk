@@ -1,4 +1,4 @@
-package org.example.lv1;
+package org.example.essential.lv1;
 
 import java.util.InputMismatchException;
 import java.util.Scanner;

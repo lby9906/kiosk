@@ -1,4 +1,4 @@
-package org.example.lv2;
+package org.example.essential.lv2;
 
 import java.util.ArrayList;
 import java.util.InputMismatchException;

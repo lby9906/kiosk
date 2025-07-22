@@ -1,4 +1,4 @@
-package org.example.lv2;
+package org.example.essential.lv2;
 
 public class MenuItem {
 

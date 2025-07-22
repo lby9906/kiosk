@@ -1,4 +1,4 @@
-package org.example.lv5;
+package org.example.essential.lv5;
 
 import java.util.List;
 

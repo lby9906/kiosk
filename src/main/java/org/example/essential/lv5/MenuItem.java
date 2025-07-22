@@ -1,6 +1,4 @@
-package org.example.lv5;
-
-import java.util.List;
+package org.example.essential.lv5;
 
 public class MenuItem {
 
