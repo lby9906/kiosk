@@ -7,7 +7,7 @@ import java.util.Scanner;
 
 public class Kiosk {
 
-    List<Menu> menus = new ArrayList<>();
+    private List<Menu> menus = new ArrayList<>();
 
     public Kiosk(List<Menu> menus) {
         this.menus = menus;
@@ -33,11 +33,6 @@ public class Kiosk {
                 System.out.println("0. 뒤로가기");
                 System.out.println();
 
-            }catch (InputMismatchException e) {
-                throw new IllegalArgumentException("주어진 번호만 입력하실 수 있습니다.");
-            }
-
-            try {
                 while (true) {
                     System.out.print("메뉴 번호를 입력하세요: ");
                     int itemSelect = in.nextInt();
@@ -53,11 +48,11 @@ public class Kiosk {
         }
     }
 
-    public void printSelectMenu(int categorySelect, int itemSelect, List<Menu> menus) {
+    private void printSelectMenu(int categorySelect, int itemSelect, List<Menu> menus) {
         System.out.println("선택한 메뉴: " +
-                menus.get(categorySelect-1).getMenuItems().get(itemSelect - 1).getName() + " | W " +
-                menus.get(categorySelect-1).getMenuItems().get(itemSelect - 1).getPrice() + " | " +
-                menus.get(categorySelect-1).getMenuItems().get(itemSelect - 1).getDescription()
+                menus.get(categorySelect - 1).getMenuItems().get(itemSelect - 1).getName() + " | W " +
+                menus.get(categorySelect - 1).getMenuItems().get(itemSelect - 1).getPrice() + " | " +
+                menus.get(categorySelect - 1).getMenuItems().get(itemSelect - 1).getDescription()
         );
     }
 }
