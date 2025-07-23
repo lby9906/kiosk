@@ -12,38 +12,31 @@ public class Cart {
     public Cart() {
     }
 
-    public void addMenuItem(MenuItem menuItem, int quantity, int price) {
+    public void addMenuItem(MenuItem menuItem, int quantity) {
         for (int i=0; i<quantity; i++) {
             menuItems.add(menuItem);
         }
         this.quantity += quantity;
-        this.totalPrice += quantity*price;
+        this.totalPrice += quantity * menuItem.getPrice();
     }
 
     public List<MenuItem> getMenuItems() {
         return menuItems;
     }
 
-    public int getQuantity() {
-        return quantity;
-    }
-
     public int getTotalPrice() {
         return totalPrice;
     }
 
-    public static void printOrders(List<Cart> carts) {
+    public static void printOrders(Cart cart) {
         System.out.println("[ Orders ]");
-        for (Cart cart : carts) {
-            cart.getMenuItems().stream()
-                    .forEach(menu -> System.out.println(menu.getName() + " | " + "W " + menu.getPrice() + " | " +
-                            menu.getDescription()));
-        }
+        cart.getMenuItems().stream()
+                        .forEach(menu -> System.out.println(menu.getName() + " | " + "W " + menu.getPrice() + " | " +
+                                menu.getDescription()));
         System.out.println();
         System.out.println("[ Total ]");
-        for (Cart cartPrice : carts) {
-            System.out.println("W " + cartPrice.getTotalPrice());
-        }
+        System.out.println("W " + cart.getTotalPrice());
+
         System.out.println();
         System.out.println("1. 주문      2. 메뉴판");
     }
@@ -52,5 +45,18 @@ public class Cart {
         menuItems.clear();
         quantity = 0;
         totalPrice = 0;
+    }
+
+    public boolean add(int cartSelect, MenuItem menuItem){
+        if (cartSelect == 1) {
+            addMenuItem(menuItem, 1);
+            System.out.println(menuItem.getName() + " 이 장바구니에 추가되었습니다.");
+            return true;
+        } else if (cartSelect == 2) {
+            return false;
+        } else {
+            System.out.println("유효하지 않은 장바구니 번호입니다.");
+        }
+        return true;
     }
 }
