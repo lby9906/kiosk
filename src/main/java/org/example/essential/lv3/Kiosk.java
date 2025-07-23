@@ -13,11 +13,9 @@ public class Kiosk {
     public void start() {
         Scanner in = new Scanner(System.in);
 
-        int count = 1;
         System.out.println("[ SHAKESHACK MENU ]");
-        for (MenuItem menu : menuItems) {
-            System.out.println(count + ". " + menu.getName() + "    | W " + menu.getPrice() + " | " + menu.getDescription());
-            count++;
+        for (int i=0; i< menuItems.size(); i++) {
+            System.out.println((i+1) + ". " + menuItems.get(i).getName() + "    | W " + menuItems.get(i).getPrice() + " | " + menuItems.get(i).getDescription());
         }
         System.out.println("0. 종료           | 종료");
         System.out.println();
