@@ -5,6 +5,9 @@ import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
 
+import static org.example.challenge.lv2.DiscountRateType.*;
+import static org.example.challenge.lv2.DiscountRateType.ORDINARY;
+
 public class Kiosk {
 
     private Cart cart = new Cart();
@@ -18,32 +21,69 @@ public class Kiosk {
 
     public void start() {
         Scanner in = new Scanner(System.in);
-        int categorySelect;
-        int itemSelect;
 
         while (true) {
             try {
-                Menu.getMenuCategory(menus);
+                if (!cart.getMenuItems().isEmpty()) {
+                    Menu.getMenuCategory(menus);
+                    orders.printOrderMenu();
+                } else {
+                    Menu.getMenuCategory(menus);
+                }
+
                 System.out.print("카테고리 번호를 입력하세요: ");
-                categorySelect = in.nextInt();
+                String stringCategory =  in.nextLine();
+                int categorySelect = Integer.parseInt(stringCategory);
 
                 if (categorySelect == 0) {
                     System.out.println("프로그램을 종료합니다.");
                     break;
-                } else if (categorySelect < 0 || categorySelect > 3) {
-                    throw new IllegalArgumentException("유효하지 않은 카테고리 번호입니다.");
+                } else if (categorySelect == 4) {
+                    System.out.println("아래와 같이 주문 하시겠습니까?");
+                    cart.printOrders(cart);
+                    System.out.print("주문 번호 입력: ");
+                    String stringOrderSelect =  in.nextLine();
+                    int orderSelect = Integer.parseInt(stringOrderSelect);
+
+                    if (orderSelect == 1) {
+                        discountRate.printDiscountRate();
+                        System.out.print("할인 정보 입력: ");
+                        int discountSelect = in.nextInt();
+                        applyDiscountOrder(discountSelect);
+                        break;
+
+                    } else if (orderSelect == 2) {
+                        System.out.println("주문을 취소하고 다시 메뉴를 선택합니다.");
+                        continue;
+
+                    } else if (orderSelect == 3) {
+                        System.out.print("삭제할 메뉴 이름을 입력: ");
+                        String remove = in.nextLine();
+                        cart.removeMenuList(cart, remove);
+                        cart.printOrders(cart);
+                        continue;
+
+                    } else if (orderSelect < 1 || orderSelect > 2) {
+                        throw new IllegalArgumentException("유효하지 않은 주문 번호입니다.");
+                    }
+
+                } else if (categorySelect >= 1 && categorySelect <= menus.size()) {
+                    printMenuList(menus, categorySelect);
+
+                } else if (categorySelect == 5) {
+                    cart.clearCart();
+                    System.out.println("다시 메뉴로 돌아갑니다.");
+                    continue;
+
+                } else if (categorySelect < 0 || categorySelect > 5) {
+                    throw new IllegalArgumentException("유효하지 않은 번호입니다.");
                 }
 
-                printMenuList(menus, categorySelect);
 
-            } catch (InputMismatchException e) {
-                throw new IllegalArgumentException("유효하지 않은 입력입니다.");
-            }
-
-            while (true) {
-                try {
+                while (true) {
                     System.out.print("메뉴 번호를 입력하세요: ");
-                    itemSelect = in.nextInt();
+                    String stringItemSelect =  in.nextLine();
+                    int itemSelect = Integer.parseInt(stringItemSelect);
 
                     if (itemSelect == 0) {
                         break;
@@ -54,82 +94,26 @@ public class Kiosk {
                     System.out.print("선택한 메뉴: ");
                     printSelectMenu(categorySelect, itemSelect, menus);
 
-                    try {
-                        System.out.println();
-                        System.out.println("위 메뉴를 장바구니에 추가하시겠습니까?");
-                        System.out.println("1. 확인        2. 취소");
-                        System.out.print("장바구니 번호 입력: ");
-                        int cartSelect = in.nextInt();
+                    System.out.println();
+                    System.out.println("위 메뉴를 장바구니에 추가하시겠습니까?");
+                    System.out.println("1. 확인        2. 취소");
+                    System.out.print("장바구니 번호 입력: ");
+                    String stringCartSelect =  in.nextLine();
+                    int cartSelect = Integer.parseInt(stringCartSelect);
 
-                        if (cartSelect == 1) {
-                            cart.addMenuItem(menus.get(categorySelect - 1).getMenuItems().get(itemSelect - 1),
-                                    1,
-                                    menus.get(categorySelect - 1).getMenuItems().get(itemSelect - 1).getPrice());
+                    MenuItem menuItem = menus.get(categorySelect - 1).getMenuItems().get(itemSelect - 1);
 
-                            System.out.println(
-                                    cart.getMenuItems().get(cart.getMenuItems().size() - 1).getName()
-                                            + " 이 장바구니에 추가되었습니다.");
-                        } else if (cartSelect == 2) {
-                            break;
-                        } else if (cartSelect > 2) {
-                            throw new IllegalArgumentException("유효하지 않은 장바구니 번호입니다.");
-                        }
-
-                        try {
-                            if (cart.getQuantity() > 0) {
-                                Menu.getMenuCategory(menus);
-                                orders.printOrderMenu();
-                                System.out.print("번호 입력: ");
-                                int orderSelect = in.nextInt();
-
-                                if (orderSelect == 4) {
-                                    System.out.println("아래와 같이 주문 하시겠습니까?");
-                                    cart.printOrders(List.of(cart));
-                                    System.out.print("주문 번호 입력: ");
-                                    int finalSelect = in.nextInt();
-
-                                    System.out.println();
-
-                                    if (finalSelect == 1) {
-                                        discountRate.printDiscountRate();
-                                        System.out.print("할인 정보 입력: ");
-                                        int discountSelect = in.nextInt();
-                                        applyDiscountOrder(discountSelect);
-                                        break;
-                                    } else if (finalSelect == 2) {
-                                        System.out.println("주문을 취소하고 다시 메뉴를 선택합니다.");
-                                        break;
-                                    } else if (finalSelect == 3) {
-                                        System.out.print("삭제할 메뉴 이름을 입력: ");
-                                        String remove = in.next();
-                                        cart.removeMenuList(List.of(cart), remove);
-                                        cart.printOrders(List.of(cart));
-                                        break;
-
-                                    } else if (finalSelect < 1 || finalSelect > 3) {
-                                        throw new IllegalArgumentException("유효하지 않은 주문 번호입니다.");
-                                    }
-                                } else if (orderSelect >= 1 && orderSelect <= menus.size()) {
-                                    categorySelect = orderSelect;
-                                    printMenuList(menus, categorySelect);
-                                } else if (orderSelect == 5) {
-                                    cart.clearCart();
-                                    System.out.println("주문을 취소하고 다시 메뉴를 선택합니다.");
-                                    break;
-                                } else if (orderSelect < 0 || orderSelect > 5) {
-                                    throw new IllegalArgumentException("유효하지 않은 번호입니다.");
-                                }
-                            }
-
-                        } catch (IllegalArgumentException e) {
-                            throw new IllegalArgumentException("유효하지 않은 입력입니다.");
-                        }
-                    } catch (InputMismatchException e) {
-                        throw new IllegalArgumentException("유효하지 않은 입력입니다.");
+                    if (cartSelect == 1) {
+                        cart.add(cartSelect, menuItem);
+                        break;
+                    } else {
+                        System.out.println("추가가 취소되었습니다.");
+                        break;
                     }
-                } catch (InputMismatchException e) {
-                    throw new IllegalArgumentException("유효하지 않은 입력입니다.");
                 }
+
+            } catch (InputMismatchException e) {
+                throw new IllegalArgumentException("유효하지 않은 입력입니다.");
             }
         }
     }
@@ -138,12 +122,13 @@ public class Kiosk {
         double discountPrice = cart.getTotalPrice();
 
         switch (discountSelect) {
-            case 1 -> discountPrice = discountRate.discountNationlMerit(DiscountRateType.NATIONL_MERIT, cart.getTotalPrice());
-            case 2 -> discountPrice = discountRate.discountMilitary(DiscountRateType.MILITARY, cart.getTotalPrice());
-            case 3 -> discountPrice = discountRate.discountStudent(DiscountRateType.STUDENT, cart.getTotalPrice());
-            case 4 -> discountPrice = discountRate.discountOrdinary(DiscountRateType.ORDINARY, cart.getTotalPrice());
+            case 1 -> discountPrice = discountRate.discount(NATIONL_MERIT, cart.getTotalPrice());
+            case 2 -> discountPrice = discountRate.discount(MILITARY, cart.getTotalPrice());
+            case 3 -> discountPrice = discountRate.discount(STUDENT, cart.getTotalPrice());
+            case 4 -> discountPrice = discountRate.discount(ORDINARY, cart.getTotalPrice());
         }
-        orders.setOrders(cart, discountPrice);
+
+        orders.printOrderSuccess(discountPrice);
         cart.clearCart();
     }
 
