@@ -1,16 +1,11 @@
 package org.example.challenge.lv2;
 
-import java.util.ArrayList;
-import java.util.List;
 
 public class Orders {
-    private List<Cart> carts = new ArrayList<>();
-
     public Orders() {
     }
 
-    public void setOrders(Cart cart, double discountPrice) {
-        carts.add(cart);
+    public void printOrderSuccess(double discountPrice) {
         System.out.println("주문이 완료되었습니다. 금액은 W " + discountPrice + " 입니다.");
     }
 
